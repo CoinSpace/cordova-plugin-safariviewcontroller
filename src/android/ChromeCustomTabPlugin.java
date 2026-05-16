@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import androidx.annotation.ColorInt;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.browser.customtabs.CustomTabsClient;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.browser.customtabs.CustomTabsSession;
@@ -149,7 +150,8 @@ public class ChromeCustomTabPlugin extends CordovaPlugin{
 
     private void show(String url, @ColorInt int toolbarColor, boolean showDefaultShareMenuItem, String transition) {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder(getSession())
-                .setToolbarColor(toolbarColor);
+                .setToolbarColor(toolbarColor)
+                .setColorScheme(getColorScheme());
         if(showDefaultShareMenuItem)
             builder.addDefaultShareMenuItem();
         if(!TextUtils.isEmpty(transition))
@@ -164,6 +166,17 @@ public class ChromeCustomTabPlugin extends CordovaPlugin{
         }
 
         startCustomTabActivity(url, customTabsIntent.intent);
+    }
+
+    private int getColorScheme() {
+        switch (AppCompatDelegate.getDefaultNightMode()) {
+            case AppCompatDelegate.MODE_NIGHT_NO:
+                return CustomTabsIntent.COLOR_SCHEME_LIGHT;
+            case AppCompatDelegate.MODE_NIGHT_YES:
+                return CustomTabsIntent.COLOR_SCHEME_DARK;
+            default:
+                return CustomTabsIntent.COLOR_SCHEME_SYSTEM;
+        }
     }
 
     private void addTransition(CustomTabsIntent.Builder builder, String transition) {
