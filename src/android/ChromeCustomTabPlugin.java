@@ -150,10 +150,8 @@ public class ChromeCustomTabPlugin extends CordovaPlugin{
 
     private void show(String url, @ColorInt int toolbarColor, boolean showDefaultShareMenuItem, String transition) {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder(getSession())
-                .setToolbarColor(toolbarColor)
                 .setColorScheme(getColorScheme());
-        if(showDefaultShareMenuItem)
-            builder.addDefaultShareMenuItem();
+        
         if(!TextUtils.isEmpty(transition))
             addTransition(builder, transition);
 
